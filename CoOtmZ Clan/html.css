@@ -113,18 +113,10 @@ body::after {
 /* ボタン行 */
 .button-row {
 	display: flex;
-	gap: 1.2rem; /* 間隔を少し広げる */
+	gap: 0.8rem;
 	flex-wrap: wrap;
 	justify-content: center;
 	margin-top: 1.6rem;
-}
-
-/* ヘッダー直下に表示するスタイル（固定ヘッダー下に配置） */
-.header-buttons {
-	position: relative;
-	top: 0;
-	margin-top: 0.4rem; /* ヘッダーの下に近く配置 */
-	z-index: 18;
 }
 
 .cta-button {
