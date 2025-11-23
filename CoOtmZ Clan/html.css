@@ -1,0 +1,259 @@
+html, body {
+	height: 100%;
+	margin: 0;
+}
+
+body {
+	min-height: 100vh;
+	position: relative;
+	overflow: hidden;
+	background: #000;
+	color: #fff;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* ヘッダー分だけ中身を下げる */
+body { padding-top: 6.5rem; }
+
+body::before {
+	content: "";
+	position: fixed;
+	inset: -20%;
+	background: linear-gradient(135deg, #ff004d, #ff8c00, #ffd700, #00c853, #00bcd4, #3f51b5, #9c27b0, #ff004d);
+	background-size: 200% 200%;
+	animation: rainbowShift 12s linear infinite;
+	filter: blur(24px) saturate(140%);
+	transform: rotate(-10deg) scale(1.05);
+	z-index: -2;
+}
+
+body::after {
+	content: "";
+	position: fixed;
+	inset: 0;
+	background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.00) 40%);
+	mix-blend-mode: overlay;
+	transform: rotate(-10deg) translateZ(0);
+	z-index: -1;
+	pointer-events: none;
+}
+
+@keyframes rainbowShift {
+	0% { background-position: 0% 50%; }
+	50% { background-position: 100% 50%; }
+	100% { background-position: 0% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body::before { animation: none; }
+}
+
+.container {
+	position: relative;
+	z-index: 0;
+	min-height: calc(100vh - 6.5rem);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 2rem;
+	text-align: center;
+}
+
+/* 小さい画面では上にずらしすぎないようにする */
+@media (max-height: 700px), (max-width: 640px) {
+	body { padding-top: 5rem; }
+	.container { min-height: calc(100vh - 5rem); }
+}
+
+/* 固定ヘッダー */
+.top-header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 20;
+	text-align: center;
+	padding: 0.9rem 1rem;
+	pointer-events: none;
+}
+.top-header h1, .top-header h2 {
+	margin: 0;
+	color: #fff;
+	pointer-events: auto;
+}
+
+/* 大きくてかっこいいフォント＋黒縁＋白い光（グロー）＋アニメーション */
+.top-header h1 {
+	font-family: 'Orbitron', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	font-weight: 900;
+	font-size: clamp(2.2rem, 8vw, 5rem);
+	letter-spacing: 0.04em;
+	-webkit-text-stroke: 2px #000; /* 黒い輪郭 */
+	color: #fff;
+	text-shadow:
+		0 0 6px rgba(255,255,255,0.95),
+		0 0 18px rgba(255,255,255,0.7),
+		0 6px 20px rgba(0,0,0,0.65);
+	transform-origin: center;
+	will-change: transform, text-shadow;
+	animation: titleMove 3.6s ease-in-out infinite, glowPulse 3.6s ease-in-out infinite;
+}
+
+.top-header h2 {
+	font-size: clamp(1.05rem, 3.2vw, 1.4rem);
+	opacity: 0.98;
+	margin-top: 0.25rem;
+	font-weight: 700;
+	transform: translateY(6px);
+	transition: transform 320ms ease, font-size 220ms ease, opacity 220ms ease;
+}
+
+/* ボタン行 */
+.button-row {
+	display: flex;
+	gap: 1.2rem; /* 間隔を少し広げる */
+	flex-wrap: wrap;
+	justify-content: center;
+	margin-top: 1.6rem;
+}
+
+/* ヘッダー直下に表示するスタイル（固定ヘッダー下に配置） */
+.header-buttons {
+	position: relative;
+	top: 0;
+	margin-top: 0.4rem; /* ヘッダーの下に近く配置 */
+	z-index: 18;
+}
+
+.cta-button {
+	appearance: none;
+	border: none;
+	cursor: pointer;
+	padding: 0.65rem 1.15rem;
+	min-width: 92px;
+	border-radius: 10px;
+	color: #fff;
+	font-weight: 700;
+	position: relative;
+	overflow: hidden;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.03);
+	transition: transform 200ms cubic-bezier(.2,.9,.2,1), box-shadow 200ms ease, filter 200ms ease;
+	will-change: transform, box-shadow;
+
+	/* 縦方向の赤→黒グラデーション（アニメーション） */
+	background: linear-gradient(180deg, #ff1f1f 0%, #b30000 50%, #000000 100%);
+	background-size: 100% 300%;
+	animation: gradientBG-vertical 6s linear infinite, floatButton 6s ease-in-out infinite;
+}
+
+.cta-button::after {
+	/* ぼんやりした白のハイライト */
+	content: "";
+	position: absolute;
+	left: -30%;
+	top: 0;
+	width: 60%;
+	height: 100%;
+	background: linear-gradient(90deg, rgba(255,255,255,0.18), rgba(255,255,255,0.02));
+	transform: skewX(-12deg) translateX(-10%);
+	transition: transform 520ms ease;
+	pointer-events: none;
+	mix-blend-mode: overlay;
+}
+
+.cta-button:hover::after { transform: skewX(-12deg) translateX(10%); }
+
+.cta-button:hover {
+	transform: translateY(-6px) scale(1.03);
+	box-shadow: 0 12px 32px rgba(0,0,0,0.7), 0 0 18px rgba(255,255,255,0.05);
+	filter: saturate(120%);
+}
+
+.cta-button:active { transform: translateY(-2px) scale(0.995); }
+
+@keyframes gradientBG-vertical {
+	0% { background-position: 50% 0%; }
+	50% { background-position: 50% 100%; }
+	100% { background-position: 50% 0%; }
+}
+
+/* ゆるい浮遊アニメーション */
+@keyframes floatButton {
+	0% { transform: translateY(0) scale(1); }
+	50% { transform: translateY(-6px) scale(1.01); }
+	100% { transform: translateY(0) scale(1); }
+}
+
+/* 複数の異なる浮遊アニメーションを定義（ボタンごとに振れ幅を変える） */
+@keyframes floatA { 0%{transform:translateY(0)}50%{transform:translateY(-4px)}100%{transform:translateY(0)} }
+@keyframes floatB { 0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)} }
+@keyframes floatC { 0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)} }
+@keyframes floatD { 0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)} }
+@keyframes floatE { 0%{transform:translateY(0)}50%{transform:translateY(-12px)}100%{transform:translateY(0)} }
+@keyframes floatF { 0%{transform:translateY(0)}50%{transform:translateY(-5px)}100%{transform:translateY(0)} }
+
+/* ボタンごとにグラデーション速度・浮遊アニメーション・遅延をバラバラに設定 */
+.cta-button:nth-child(1) {
+	animation: gradientBG-vertical 5s linear infinite, floatA 5.5s ease-in-out infinite;
+}
+.cta-button:nth-child(2) {
+	animation: gradientBG-vertical 6.2s linear infinite, floatB 6.8s ease-in-out infinite;
+	animation-delay: 0.12s, 0.2s;
+}
+.cta-button:nth-child(3) {
+	animation: gradientBG-vertical 4.6s linear infinite, floatC 5.6s ease-in-out infinite;
+	animation-delay: 0.06s, 0.36s;
+}
+.cta-button:nth-child(4) {
+	animation: gradientBG-vertical 7s linear infinite, floatD 6s ease-in-out infinite;
+	animation-delay: 0.18s, 0.0s;
+}
+.cta-button:nth-child(5) {
+	animation: gradientBG-vertical 5.8s linear infinite, floatE 7.2s ease-in-out infinite;
+	animation-delay: 0.04s, 0.12s;
+}
+.cta-button:nth-child(6) {
+	animation: gradientBG-vertical 6.6s linear infinite, floatF 5.2s ease-in-out infinite;
+	animation-delay: 0.0s, 0.28s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.cta-button { animation: none; transition: none; }
+	.cta-button::after { transition: none; }
+}
+
+@media (max-width: 640px) {
+	.top-header h2 {
+		transform: translateY(3px);
+		font-size: clamp(0.95rem, 3.8vw, 1.1rem);
+	}
+}
+
+@keyframes titleMove {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(8px); }
+}
+
+@keyframes glowPulse {
+	0% {
+		text-shadow: 0 0 6px rgba(255,255,255,0.9), 0 0 18px rgba(255,255,255,0.6), 0 6px 20px rgba(0,0,0,0.6);
+	}
+	50% {
+		text-shadow: 0 0 18px rgba(255,255,255,1), 0 0 36px rgba(255,255,255,0.8), 0 8px 26px rgba(0,0,0,0.75);
+	}
+	100% {
+		text-shadow: 0 0 6px rgba(255,255,255,0.9), 0 0 18px rgba(255,255,255,0.6), 0 6px 20px rgba(0,0,0,0.6);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.top-header h1 { animation: none; }
+}
+
+/* テキストやリンクが見えるように軽いフォアグラウンドスタイル */
+h1, p, a, button {
+	color: #fff;
+}
+
